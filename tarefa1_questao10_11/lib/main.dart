@@ -26,13 +26,16 @@ void main() {
               label: Text('Estilo'),
             ),
             DataColumn(
-              label: Text('BIU'),
+              label: Text('IBU'),
             ),
             DataColumn(
               label: Text('Teor alcoólico'),
             ),
             DataColumn(
               label: Text('Volume líquido'),
+            ),
+            DataColumn(
+              label: Text('Fabricante'),
             ),
           ],
           rows: [
@@ -42,6 +45,7 @@ void main() {
               DataCell(Text('65')),
               DataCell(Text('9%')),
               DataCell(Text('750 ml')),
+              DataCell(Text('Unibroue')),
             ]),
             DataRow(cells: [
               DataCell(Text('Sapporo Premium')),
@@ -49,6 +53,7 @@ void main() {
               DataCell(Text('54')),
               DataCell(Text('4.9%')),
               DataCell(Text('650 ml')),
+              DataCell(Text('Sapporo')),
             ]),
             DataRow(cells: [
               DataCell(Text('Duvel')),
@@ -56,6 +61,7 @@ void main() {
               DataCell(Text('82')),
               DataCell(Text('8,5%')),
               DataCell(Text('330ml')),
+              DataCell(Text('Moortgart')),
             ]),
             DataRow(cells: [
               DataCell(Text('Budweiser')),
@@ -63,20 +69,39 @@ void main() {
               DataCell(Text('10')),
               DataCell(Text('5,0%')),
               DataCell(Text('330ml')),
-            ]),
-            DataRow(cells: [
-              DataCell(Text('Budweiser')),
-              DataCell(Text('American lager')),
-              DataCell(Text('10')),
-              DataCell(Text('5,0%')),
-              DataCell(Text('330ml')),
+              DataCell(Text('Anheuser-Busch')),
             ]),
             DataRow(cells: [
               DataCell(Text('Heineken')),
               DataCell(Text('International Pale Lager')),
               DataCell(Text('23')),
-              DataCell(Text('Holanda')),
-              DataCell(Text('4,5% de álcool')),
+              DataCell(Text('4,5%')),
+              DataCell(Text('330ml')),
+              DataCell(Text('Heineken')),
+            ]),
+            DataRow(cells: [
+              DataCell(Text('Corona Extra')),
+              DataCell(Text('American Lager')),
+              DataCell(Text('19')),
+              DataCell(Text('5,O%')),
+              DataCell(Text('330ml')),
+              DataCell(Text('Grupo Modelo')),
+            ]),
+            DataRow(cells: [
+              DataCell(Text('Petra')),
+              DataCell(Text('American Lager')),
+              DataCell(Text('10')),
+              DataCell(Text('4,0 a 4,9%')),
+              DataCell(Text('330ml')),
+              DataCell(Text('Grupo Petrópolis')),
+            ]),
+            DataRow(cells: [
+              DataCell(Text('Guinnes Draught')),
+              DataCell(Text('Stout')),
+              DataCell(Text('45')),
+              DataCell(Text('4,1%')),
+              DataCell(Text('440 ml')),
+              DataCell(Text('St. James Gate Brewery')),
             ]),
           ],
         ),
