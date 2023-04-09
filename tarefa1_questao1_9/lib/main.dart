@@ -75,6 +75,12 @@ void main() {
                 fontSize: 19,
               ),
             ),
+            const SizedBox(height: 18),
+            Image.network(
+              'https://mercadonegroantiguidades.com.br/wp-content/uploads/2016/05/caneta-pena3.jpg',
+              height: 200,
+              width: 200,
+            ),
           ],
         ),
       ),
