@@ -76,16 +76,21 @@ void main() {
               ),
             ),
             const SizedBox(height: 18),
-            Image.network(
-              'https://mercadonegroantiguidades.com.br/wp-content/uploads/2016/05/caneta-pena3.jpg',
-              height: 200,
-              width: 200,
+            FadeInImage(
+              placeholder: NetworkImage(
+                  'https://i.pinimg.com/564x/d6/67/12/d66712decaabceddf507f0f03a98f2a9.jpg'),
+              image: NetworkImage(
+                  'https://mercadonegroantiguidades.com.br/wp-content/uploads/2016/05/caneta-pena3.jpg'),
+              height: 260,
+              width: 260,
+              fadeInDuration: Duration(milliseconds: 500),
+              fadeInCurve: Curves.easeIn,
             ),
           ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0, // define o item selecionado
+        currentIndex: 0,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
