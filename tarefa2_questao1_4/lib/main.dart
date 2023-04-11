@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+void main() {
+  MyApp app = const MyApp();
+  runApp(app);
+}
+
 class NewNavBar extends StatelessWidget {
   NewNavBar();
 
@@ -53,9 +58,4 @@ class MyApp extends StatelessWidget {
           bottomNavigationBar: NewNavBar(),
         ));
   }
-}
-
-void main() {
-  MyApp app = const MyApp();
-  runApp(app);
 }
