@@ -26,6 +26,20 @@ class NewNavBar extends StatelessWidget {
   }
 }
 
+class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const MyAppBar();
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      title: const Text("Dicas"),
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
 class TelaInicial extends StatelessWidget {
   TelaInicial();
 
@@ -53,7 +67,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         theme: ThemeData(primarySwatch: Colors.deepPurple),
         home: Scaffold(
-          appBar: AppBar(title: Text("Dicas")),
+          appBar: MyAppBar(),
           body: TelaInicial(),
           bottomNavigationBar: NewNavBar(),
         ));
