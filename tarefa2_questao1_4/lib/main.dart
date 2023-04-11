@@ -40,13 +40,22 @@ class TelaInicial extends StatelessWidget {
   }
 }
 
+class MyApp extends StatelessWidget {
+  const MyApp();
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        theme: ThemeData(primarySwatch: Colors.deepPurple),
+        home: Scaffold(
+          appBar: AppBar(title: Text("Dicas")),
+          body: TelaInicial(),
+          bottomNavigationBar: NewNavBar(),
+        ));
+  }
+}
+
 void main() {
-  MaterialApp app = MaterialApp(
-      theme: ThemeData(primarySwatch: Colors.deepPurple),
-      home: Scaffold(
-        appBar: AppBar(title: Text("Dicas")),
-        body: TelaInicial(),
-        bottomNavigationBar: NewNavBar(),
-      ));
+  MyApp app = const MyApp();
   runApp(app);
 }
