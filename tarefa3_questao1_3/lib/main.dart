@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-//Passo 1
+//Passo 2
 void main() {
   MyApp app = MyApp();
 
@@ -45,7 +45,8 @@ class NewNavBar extends StatelessWidget {
 }
 
 class DataBodyWidget extends StatelessWidget {
-  DataBodyWidget();
+  List<String> objetos;
+  DataBodyWidget({this.objetos = const []});
 
   @override
   Widget build(BuildContext context) {
