@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-//Passo 3
+//Passo 5
 void main() {
   MyApp app = MyApp();
 
@@ -17,7 +17,11 @@ class MyApp extends StatelessWidget {
           appBar: AppBar(
             title: const Text("Dicas"),
           ),
-          body: DataBodyWidget(),
+          body: DataBodyWidget(objetos: [
+            "La Fin Du Monde - Bock - 65 ibu",
+            "Sapporo Premiume - Sour Ale - 54 ibu",
+            "Duvel - Pilsner - 82 ibu"
+          ]),
           bottomNavigationBar: NewNavBar(),
         ));
   }
