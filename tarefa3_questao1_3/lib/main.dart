@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-//Passo 2
+//Passo 3
 void main() {
   MyApp app = MyApp();
 
@@ -46,20 +46,17 @@ class NewNavBar extends StatelessWidget {
 
 class DataBodyWidget extends StatelessWidget {
   List<String> objetos;
+
   DataBodyWidget({this.objetos = const []});
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Expanded(
-        child: Text("La Fin Du Monde - Bock - 65 ibu"),
-      ),
-      Expanded(
-        child: Text("Sapporo Premiume - Sour Ale - 54 ibu"),
-      ),
-      Expanded(
-        child: Text("Duvel - Pilsner - 82 ibu"),
-      )
-    ]);
+    List<Expanded> allTheLines = [];
+    for (var obj in objetos) {
+      allTheLines.add(Expanded(
+        child: Center(child: Text(obj)),
+      ));
+    }
+    return Column(children: allTheLines);
   }
 }
