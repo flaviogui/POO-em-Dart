@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-//Passo 5
+//Passo 6
 void main() {
   MyApp app = MyApp();
 
@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(primarySwatch: Colors.deepPurple),
+        theme: ThemeData(primarySwatch: Colors.green),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
@@ -53,14 +53,19 @@ class DataBodyWidget extends StatelessWidget {
 
   DataBodyWidget({this.objetos = const []});
 
+  Expanded processarUmElemento(String obj) {
+    return Expanded(
+      child: Center(child: Text(obj)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<Expanded> allTheLines = [];
-    for (var obj in objetos) {
-      allTheLines.add(Expanded(
-        child: Center(child: Text(obj)),
-      ));
-    }
-    return Column(children: allTheLines);
+    return Column(
+        children: objetos
+            .map((obj) => Expanded(
+                  child: Center(child: Text(obj)),
+                ))
+            .toList());
   }
 }
