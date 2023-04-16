@@ -22,13 +22,20 @@ class MyApp extends StatelessWidget {
             "Sapporo Premiume - Sour Ale - 54 ibu",
             "Duvel - Pilsner - 82 ibu"
           ]),
-          bottomNavigationBar: NewNavBar(),
+          bottomNavigationBar: NewNavBar(
+            icone: [
+              Icons.coffee_outlined,
+              Icons.local_drink_outlined,
+              Icons.flag_outlined,
+            ],
+          ),
         ));
   }
 }
 
 class NewNavBar extends StatelessWidget {
-  NewNavBar();
+  List<IconData> icone;
+  NewNavBar({required this.icone});
 
   void botaoFoiTocado(int index) {
     print("Tocaram no botão $index");
@@ -36,21 +43,22 @@ class NewNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(onTap: botaoFoiTocado, items: const [
-      BottomNavigationBarItem(
-        label: "Cafés",
-        icon: Icon(Icons.coffee_outlined),
-      ),
-      BottomNavigationBarItem(
-          label: "Cervejas", icon: Icon(Icons.local_drink_outlined)),
-      BottomNavigationBarItem(label: "Nações", icon: Icon(Icons.flag_outlined))
-    ]);
+    return BottomNavigationBar(
+      onTap: botaoFoiTocado,
+      items: icone
+          .map(
+            (icone) => BottomNavigationBarItem(
+              icon: Icon(icone),
+              label: '',
+            ),
+          )
+          .toList(),
+    );
   }
 }
 
 class DataBodyWidget extends StatelessWidget {
   List<String> objetos;
-
   DataBodyWidget({this.objetos = const []});
 
   Expanded processarUmElemento(String obj) {
