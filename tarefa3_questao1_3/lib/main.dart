@@ -52,7 +52,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                 PopupMenuItem<Color>(
                   child: Container(
                     color: Colors.purple,
-                    child: Text('Roso'),
+                    child: Text('Roxo'),
                   ),
                   value: Colors.purple,
                 ),
