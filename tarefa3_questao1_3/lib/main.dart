@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-//Passo 6
 void main() {
   MyApp app = MyApp();
 
@@ -14,9 +13,35 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(primarySwatch: Colors.green),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-          appBar: AppBar(
-            title: const Text("Dicas"),
-          ),
+          appBar: AppBar(title: const Text("Dicas"), actions: [
+            PopupMenuButton<Color>(
+                onSelected: (Color color) {},
+                itemBuilder: (BuildContext context) {
+                  return [
+                    PopupMenuItem<Color>(
+                      child: Container(
+                        color: Colors.red, // adiciona a cor de fundo
+                        child: Text('Vermelho'),
+                      ),
+                      value: Colors.red,
+                    ),
+                    PopupMenuItem<Color>(
+                      child: Container(
+                        color: Colors.purple,
+                        child: Text('Roso'),
+                      ),
+                      value: Colors.purple,
+                    ),
+                    PopupMenuItem<Color>(
+                      child: Container(
+                        color: Colors.blue,
+                        child: Text('Azul'),
+                      ),
+                      value: Colors.blue,
+                    ),
+                  ];
+                }),
+          ]),
           body: DataBodyWidget(objetos: [
             "La Fin Du Monde - Bock - 65 ibu",
             "Sapporo Premiume - Sour Ale - 54 ibu",
