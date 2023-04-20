@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// PASSO 2
+// PASSO 4 e 5
 void main() {
   MyApp app = MyApp();
 
@@ -8,9 +8,9 @@ void main() {
 }
 
 var dataObjectos = [
-  "La Fin Du Monde - Bock - 65 ibu",
-  "Sapporo Premiume - Sour Ale - 54 ibu",
-  "Duvel - Pilsner - 82 ibu"
+  {"name": "La Fin Du Monde", "style": "Bock", "ibu": "65"},
+  {"name": "Sapporo Premiume", "style": "Sour Ale", "ibu": "54"},
+  {"name": "Duvel", "style": "Pilsner", "ibu": "82"}
 ];
 
 class MyApp extends StatelessWidget {
@@ -51,23 +51,22 @@ class NewNavBar extends StatelessWidget {
 }
 
 class DataBodyWidget extends StatelessWidget {
-  List<String> objects;
+  List objects;
 
   DataBodyWidget({this.objects = const []});
 
-  Expanded processarUmElemento(String obj) {
-    return Expanded(
-      child: Center(child: Text(obj)),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-        children: objects
-            .map((obj) => Expanded(
-                  child: Center(child: Text(obj)),
-                ))
+    return DataTable(
+        columns: [
+          DataColumn(
+              label: Expanded(
+            child: Text('Descrição',
+                style: TextStyle(fontStyle: FontStyle.italic)),
+          ))
+        ],
+        rows: objects
+            .map((obj) => DataRow(cells: [DataCell(Text('$obj'))]))
             .toList());
   }
 }
