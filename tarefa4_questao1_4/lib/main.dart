@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 
-// PASSO 1
+// PASSO 2
 void main() {
   MyApp app = MyApp();
 
   runApp(app);
 }
+
+var dataObjectos = [
+  "La Fin Du Monde - Bock - 65 ibu",
+  "Sapporo Premiume - Sour Ale - 54 ibu",
+  "Duvel - Pilsner - 82 ibu"
+];
 
 class MyApp extends StatelessWidget {
   @override
@@ -17,11 +23,7 @@ class MyApp extends StatelessWidget {
           appBar: AppBar(
             title: const Text("Dicas"),
           ),
-          body: DataBodyWidget(objects: [
-            "La Fin Du Monde - Bock - 65 ibu",
-            "Sapporo Premiume - Sour Ale - 54 ibu",
-            "Duvel - Pilsner - 82 ibu"
-          ]),
+          body: DataBodyWidget(objects: dataObjectos),
           bottomNavigationBar: NewNavBar(),
         ));
   }
