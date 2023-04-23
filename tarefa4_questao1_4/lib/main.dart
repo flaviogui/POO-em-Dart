@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  MyApp app = MyApp();
+  MeuNovoApp app = MeuNovoApp();
 
   runApp(app);
 }
@@ -123,5 +123,27 @@ class MytileWidget extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class MeuNovoApp extends StatelessWidget {
+  get dataObjects => dataObjectos;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        theme: ThemeData(primarySwatch: Colors.orange),
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          appBar: AppBar(
+            title: const Text("Dicas"),
+          ),
+          body: Center(
+              child: MytileWidget(
+                  objects: dataObjects,
+                  propertyNames: ["name", "style", "ibu"],
+                  columnNames: ["NOME", "ESTILO", "IBU"])),
+          bottomNavigationBar: NewNavBar(),
+        ));
   }
 }
