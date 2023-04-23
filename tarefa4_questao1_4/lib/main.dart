@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// PASSO 7
 void main() {
   MyApp app = MyApp();
 
@@ -89,5 +88,35 @@ class DataBodyWidget extends StatelessWidget {
                     .map((propName) => DataCell(Text(obj[propName])))
                     .toList()))
             .toList());
+  }
+}
+
+class MytileWidget extends StatelessWidget {
+  List objects;
+
+  MytileWidget({this.objects = const [], required List<String> propertyNames});
+  var columnNames = ["Nome", "Estilo", "IBU"],
+      propertyNames = ["name", "style", "ibu"];
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: objects.length,
+      itemBuilder: (context, index) {
+        final obj = objects[index];
+
+        final columnTexts = columnNames.map((col) {
+          final prop = propertyNames[columnNames.indexOf(col)];
+          return Text("$col: ${obj[prop]}");
+        }).toList();
+
+        return ListTile(
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: columnTexts,
+          ),
+        );
+      },
+    );
   }
 }
