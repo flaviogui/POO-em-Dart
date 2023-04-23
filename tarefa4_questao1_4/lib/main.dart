@@ -37,7 +37,8 @@ class MyApp extends StatelessWidget {
                   scrollDirection: Axis.vertical,
                   child: DataBodyWidget(
                       objects: dataObjects,
-                      propertyNames: ["name", "style", "ibu"]))),
+                      propertyNames: ["name", "style", "ibu"],
+                      columnNames: ["NOME", "ESTILO", "IBU"]))),
           bottomNavigationBar: NewNavBar(),
         ));
   }
@@ -66,15 +67,16 @@ class NewNavBar extends StatelessWidget {
 
 class DataBodyWidget extends StatelessWidget {
   List objects;
+  final List<String> columnNames;
+  final List<String> propertyNames;
 
   DataBodyWidget(
-      {this.objects = const [], required List<String> propertyNames});
+      {this.objects = const [],
+      this.columnNames = const [],
+      this.propertyNames = const []});
 
   @override
   Widget build(BuildContext context) {
-    var columnNames = ["Nome", "Estilo", "IBU"],
-        propertyNames = ["name", "style", "ibu"];
-
     return DataTable(
         columns: columnNames
             .map((name) => DataColumn(
@@ -93,10 +95,13 @@ class DataBodyWidget extends StatelessWidget {
 
 class MytileWidget extends StatelessWidget {
   List objects;
+  final List<String> columnNames;
+  final List<String> propertyNames;
 
-  MytileWidget({this.objects = const [], required List<String> propertyNames});
-  var columnNames = ["Nome", "Estilo", "IBU"],
-      propertyNames = ["name", "style", "ibu"];
+  MytileWidget(
+      {this.objects = const [],
+      this.columnNames = const [],
+      this.propertyNames = const []});
 
   @override
   Widget build(BuildContext context) {
