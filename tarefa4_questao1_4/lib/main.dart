@@ -10,10 +10,20 @@ void main() {
 var dataObjectos = [
   {"name": "La Fin Du Monde", "style": "Bock", "ibu": "65"},
   {"name": "Sapporo Premiume", "style": "Sour Ale", "ibu": "54"},
-  {"name": "Duvel", "style": "Pilsner", "ibu": "82"}
+  {"name": "Duvel", "style": "Pilsner", "ibu": "82"},
+  {"name": "Budweiser", "style": "American lager", "ibu": "10"},
+  {"name": "Heineken", "style": "International Pale Lager", "ibu": "23"},
+  {"name": "Corona Extra", "style": "American Lager", "ibu": "19"},
+  {"name": "Guinnes Draft", "style": "Rost", "ibu": "45"},
+  {"name": "Hefeweizen", "style": "Weissbier", "ibu": "15"},
+  {"name": "Pilsner", "style": "Pilsner", "ibu": "45"},
+  {"name": "Stella", "style": "Premium Lager", "ibu": "16"},
+  {"name": "Skol Puro Malte", "style": "Premium Lager", "ibu": "11"},
 ];
 
 class MyApp extends StatelessWidget {
+  get dataObjects => dataObjectos;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,7 +33,12 @@ class MyApp extends StatelessWidget {
           appBar: AppBar(
             title: const Text("Dicas"),
           ),
-          body: DataBodyWidget(objects: dataObjectos),
+          body: Center(
+              child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: DataBodyWidget(
+                      objects: dataObjects,
+                      propertyNames: ["name", "style", "ibu"]))),
           bottomNavigationBar: NewNavBar(),
         ));
   }
@@ -53,7 +68,8 @@ class NewNavBar extends StatelessWidget {
 class DataBodyWidget extends StatelessWidget {
   List objects;
 
-  DataBodyWidget({this.objects = const []});
+  DataBodyWidget(
+      {this.objects = const [], required List<String> propertyNames});
 
   @override
   Widget build(BuildContext context) {
