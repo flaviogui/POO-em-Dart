@@ -30,13 +30,19 @@ class MyCustomForm extends StatelessWidget {
       children: [
         MyTextField(
             label: 'Primeiro, informe o seu email:',
-            hint: 'Exemplo: fulandodarua26@gmail.com'),
+            hint: 'Exemplo: fulandodarua26@gmail.com',
+            icone: Icons.mail),
         SizedBox(
-          height: 8,
+          height: 6,
         ),
         MyTextField(
             label: 'Agora, informe o seu nome:',
-            hint: 'Exemplo: Fulano da Silva Saraiva')
+            hint: 'Exemplo: Fulano da Silva Saraiva',
+            icone: Icons.person),
+        MyTextField(
+            label: 'Insira o seu número do Whatsapp:',
+            hint: 'Exemplo: (83)999000000',
+            icone: Icons.phone),
       ],
     );
   }
@@ -45,19 +51,21 @@ class MyCustomForm extends StatelessWidget {
 class MyTextField extends StatelessWidget {
   final String label;
   final String hint;
-  const MyTextField({Key? key, required this.label, required this.hint})
+  final IconData icone;
+  const MyTextField(
+      {Key? key, required this.label, required this.hint, required this.icone})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(5),
       child: TextField(
         decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: label,
-          hintText: hint,
-        ),
+            border: OutlineInputBorder(),
+            labelText: label,
+            hintText: hint,
+            prefixIcon: Icon(icone)),
       ),
     );
   }
