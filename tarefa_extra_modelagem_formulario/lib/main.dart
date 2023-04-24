@@ -27,6 +27,7 @@ class MyCustomForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         MyTextField(
             label: 'Primeiro, informe o seu email:',
@@ -43,6 +44,19 @@ class MyCustomForm extends StatelessWidget {
             label: 'Insira o seu número do Whatsapp:',
             hint: 'Exemplo: (83)999000000',
             icone: Icons.phone),
+        SizedBox(height: 16),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Defina seu estilo de vida: ",
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: 19,
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }
