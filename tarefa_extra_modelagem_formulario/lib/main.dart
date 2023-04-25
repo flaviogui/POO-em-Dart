@@ -21,8 +21,21 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyCustomForm extends StatelessWidget {
-  const MyCustomForm({Key? key}) : super(key: key);
+class MyCustomForm extends StatefulWidget {
+  @override
+  _MyCustomFormState createState() => _MyCustomFormState();
+}
+
+class _MyCustomFormState extends State<MyCustomForm> {
+  String _estiloVida = '';
+
+  void _enviar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Processando...'),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +53,9 @@ class MyCustomForm extends StatelessWidget {
             label: 'Agora, informe o seu nome:',
             hint: 'Exemplo: Fulano da Silva Saraiva',
             icone: Icons.person),
+        SizedBox(
+          height: 6,
+        ),
         MyTextField(
             label: 'Insira o seu número do Whatsapp:',
             hint: 'Exemplo: (83)999000000',
@@ -55,7 +71,32 @@ class MyCustomForm extends StatelessWidget {
                 fontSize: 19,
               ),
             ),
+            RadioListTile(
+              title: Text('Sou uma pessoa sedentária'),
+              value: 'Sedentário',
+              groupValue: _estiloVida,
+              onChanged: (value) {
+                setState(() {
+                  _estiloVida = value.toString();
+                });
+              },
+            ),
+            RadioListTile(
+              title: Text('Gosto de fazer atividade física'),
+              value: 'Ativo',
+              groupValue: _estiloVida,
+              onChanged: (value) {
+                setState(() {
+                  _estiloVida = value.toString();
+                });
+              },
+            ),
           ],
+        ),
+        SizedBox(height: 16),
+        ElevatedButton(
+          onPressed: _enviar,
+          child: Text('ENVIAR'),
         ),
       ],
     );
