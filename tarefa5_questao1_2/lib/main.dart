@@ -34,9 +34,10 @@ class NewNavBar extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    var state = useState(1);
     return BottomNavigationBar(
         onTap: buttonTapped,
-        currentIndex: 1,
+        currentIndex: state.value,
         items: const [
           BottomNavigationBarItem(
             label: "Cafés",
