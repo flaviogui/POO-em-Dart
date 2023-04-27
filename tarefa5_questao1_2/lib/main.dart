@@ -12,6 +12,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print("no build da classe MyApp");
     return MaterialApp(
         theme: ThemeData(primarySwatch: Colors.deepPurple),
         debugShowCheckedModeBanner: false,
@@ -30,6 +31,7 @@ class NewNavBar extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("no build da classe NewNavBar");
     var state = useState(1);
     return BottomNavigationBar(
         onTap: (index) {
@@ -56,6 +58,7 @@ class DataTableWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("no build da classe DataTableWidget");
     var columnNames = ["Nome", "Estilo", "IBU"],
         propertyNames = ["name", "style", "ibu"];
 
