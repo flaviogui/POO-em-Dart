@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+/* 
+Resposta da Questão 1: Observando os logs novamente, notei que foi adicionado um valor
+ao build da classe NewNavBar, justantamente indicando quantas vezes eu apertei no botão 
+dessa classe, diante disso, suponho que o valor diz respeito a quantidade de vezes que
+o método build mudou de estado. 
+*/
+
 var dataObjects = [];
 
 void main() {
