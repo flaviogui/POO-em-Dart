@@ -75,6 +75,7 @@ class _NewNavBar2State extends State<NewNavBar2> {
 
   @override
   Widget build(BuildContext context) {
+    print("no build da classe NewNavBar2");
     return BottomNavigationBar(
         onTap: _buttonTapped,
         currentIndex: _selectedIndex,
