@@ -12,13 +12,12 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print("no build da classe MyApp");
     return MaterialApp(
-        theme: ThemeData(primarySwatch: Colors.deepPurple),
+        theme: ThemeData(primarySwatch: Colors.orange),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
-            title: const Text("Dicas"),
+            title: const Text("DICAS"),
           ),
           body: DataTableWidget(jsonObjects: dataObjects),
           bottomNavigationBar: NewNavBar(),
@@ -31,7 +30,6 @@ class NewNavBar extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("no build da classe NewNavBar");
     var state = useState(1);
     return BottomNavigationBar(
         onTap: (index) {
@@ -51,51 +49,18 @@ class NewNavBar extends HookWidget {
   }
 }
 
-class NewNavBar2 extends StatefulWidget {
-  const NewNavBar2({super.key});
-
-  @override
-  State<NewNavBar2> createState() => _NewNavBar2State();
-}
-
-class _NewNavBar2State extends State<NewNavBar2> {
-  int _selectedIndex = 0;
-  void _buttonTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    print("no build da classe NewNavBar2");
-    return BottomNavigationBar(
-        onTap: _buttonTapped,
-        currentIndex: _selectedIndex,
-        items: const [
-          BottomNavigationBarItem(
-            label: "Cafés",
-            icon: Icon(Icons.coffee_outlined),
-          ),
-          BottomNavigationBarItem(
-              label: "Cervejas", icon: Icon(Icons.local_drink_outlined)),
-          BottomNavigationBarItem(
-              label: "Nações", icon: Icon(Icons.flag_outlined))
-        ]);
-  }
-}
-
 class DataTableWidget extends StatelessWidget {
   final List jsonObjects;
+  final List<String> columnNames;
+  final List<String> propertyNames;
 
-  DataTableWidget({this.jsonObjects = const []});
+  DataTableWidget(
+      {this.jsonObjects = const [],
+      this.columnNames = const ["Nome", "Estilo", "IBU"],
+      this.propertyNames = const ["name", "style", "ibu"]});
 
   @override
   Widget build(BuildContext context) {
-    print("no build da classe DataTableWidget");
-    var columnNames = ["Nome", "Estilo", "IBU"],
-        propertyNames = ["name", "style", "ibu"];
-
     return DataTable(
         columns: columnNames
             .map((name) => DataColumn(
