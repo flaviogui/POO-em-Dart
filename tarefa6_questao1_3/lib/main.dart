@@ -18,9 +18,33 @@ class DataService {
     ];
   }
 
+  void carregarCafe() {
+    tableStateNotifier.value = [
+      {"name": "Pilão", "style": "café em pó", "ibu": "252°"},
+      {"name": "3 corações", "style": "café torrado e moído", "ibu": "252°"},
+      {"name": "Cefé Pelé", "style": "café solúvel", "ibu": "252°"}
+    ];
+  }
+
+  void carregarNacoes() {
+    tableStateNotifier.value = [
+      {"name": "Brasil", "style": "214,3 milhões", "ibu": "8.510.000 km²"},
+      {"name": "China", "style": "1,412 bilhão ", "ibu": "9.597.000 km²"},
+      {
+        "name": "Estados Unidos",
+        "style": "331,9 milhões",
+        "ibu": "9.834.000 km²"
+      }
+    ];
+  }
+
   void carregar(int index) {
     if (index == 1) {
       carregarCervejas();
+    } else if (index == 0) {
+      carregarCafe();
+    } else if (index == 2) {
+      carregarNacoes();
     } else {
       tableStateNotifier.value = [];
     }
