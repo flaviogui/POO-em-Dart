@@ -9,8 +9,11 @@ void main() {
 
 class DataService {
   final ValueNotifier<List> tableStateNotifier = new ValueNotifier([]);
-// var dataObjects = [];
+  var coluna = ["Nome", "Estilo", "IBU"];
+  var chave = ["name", "style", "ibu"];
+
   void carregarCervejas() {
+    colunaCerveja();
     tableStateNotifier.value = [
       {"name": "La Fin Du Monde", "style": "Bock", "ibu": "65"},
       {"name": "Sapporo Premiume", "style": "Sour Ale", "ibu": "54"},
@@ -19,21 +22,39 @@ class DataService {
   }
 
   void carregarCafe() {
+    colunaCafe();
     tableStateNotifier.value = [
-      {"name": "Pilão", "style": "café em pó", "ibu": "252°"},
-      {"name": "3 corações", "style": "café torrado e moído", "ibu": "252°"},
-      {"name": "Cefé Pelé", "style": "café solúvel", "ibu": "252°"}
+      {
+        "name": "Pilão",
+        "origem": "Itália",
+        "composicao": "Café torrado e moído"
+      },
+      {
+        "name": "3 corações",
+        "origem": "Minas Gerais / BR",
+        "composicao": "Café em grão torrado e moído."
+      },
+      {
+        "name": "Baggio",
+        "origem": "Brasil",
+        "composicao": "100% coffea arabica"
+      }
     ];
   }
 
   void carregarNacoes() {
+    colunaNacao();
     tableStateNotifier.value = [
-      {"name": "Brasil", "style": "214,3 milhões", "ibu": "8.510.000 km²"},
-      {"name": "China", "style": "1,412 bilhão ", "ibu": "9.597.000 km²"},
+      {
+        "name": "Brasil",
+        "habitantes": "214,3 milhões",
+        "area": "8.510.000 km²"
+      },
+      {"name": "China", "habitantes": "1,412 bilhão ", "area": "9.597.000 km²"},
       {
         "name": "Estados Unidos",
-        "style": "331,9 milhões",
-        "ibu": "9.834.000 km²"
+        "habitantes": "331,9 milhões",
+        "area": "9.834.000 km²"
       }
     ];
   }
@@ -48,6 +69,21 @@ class DataService {
     } else {
       tableStateNotifier.value = [];
     }
+  }
+
+  void colunaCerveja() {
+    chave = ["name", "style", "ibu"];
+    coluna = ["Nome", "Estilo", "IBU"];
+  }
+
+  void colunaCafe() {
+    chave = ["name", "origem", "composicao"];
+    coluna = ["Nome", "Origem", "Ingredientes"];
+  }
+
+  void colunaNacao() {
+    chave = ["name", "habitantes", "area"];
+    coluna = ["Nome", "Habitantes", "Área"];
   }
 }
 
@@ -68,6 +104,8 @@ class MyApp extends StatelessWidget {
               builder: (_, value, __) {
                 return DataTableWidget(
                   jsonObjects: value,
+                  propertyNames: dataService.chave,
+                  columnNames: dataService.coluna,
                 );
               }),
           bottomNavigationBar:
