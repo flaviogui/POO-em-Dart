@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-var dataObjects = [];
+final ValueNotifier<List> tableStateNotifier = new ValueNotifier([]);
+// var dataObjects = [];
 
 void main() {
   MyApp app = MyApp();
@@ -19,7 +20,13 @@ class MyApp extends StatelessWidget {
           appBar: AppBar(
             title: const Text("DICAS"),
           ),
-          body: DataTableWidget(jsonObjects: dataObjects),
+          body: ValueListenableBuilder(
+              valueListenable: tableStateNotifier,
+              builder: (_, value, __) {
+                return DataTableWidget(
+                  jsonObjects: value,
+                );
+              }),
           bottomNavigationBar: NewNavBar(),
         ));
   }
@@ -34,7 +41,7 @@ class NewNavBar extends HookWidget {
     return BottomNavigationBar(
         onTap: (index) {
           state.value = index;
-          dataObjects = [
+          tableStateNotifier.value = [
             {"name": "La Fin Du Monde", "style": "Bock", "ibu": "65"},
             {"name": "Sapporo Premiume", "style": "Sour Ale", "ibu": "54"},
             {"name": "Duvel", "style": "Pilsner", "ibu": "82"}
