@@ -22,58 +22,54 @@ class DataService {
         scheme: 'https',
         host: 'random-data-api.com',
         path: 'api/beer/random_beer',
-        queryParameters: {'size': '5'});
+        queryParameters: {'size': '10'});
+
+    print('carregarCervejas #1 - antes do await');
     //2
     var jsonString = await http.read(beersUri);
+    print('carregarCervejas #2 - depois do await');
     //3
     var beersJson = jsonDecode(jsonString);
     //4
     tableStateNotifier.value = beersJson;
   }
 
-  void carregarCafe() {
+  Future<void> carregarCafe() async {
     colunaCafe();
-    tableStateNotifier.value = [
-      {
-        "name": "Pilão",
-        "origem": "Itália",
-        "composicao": "Café torrado e moído"
-      },
-      {
-        "name": "3 corações",
-        "origem": "Minas Gerais / BR",
-        "composicao": "Café em grão torrado e moído."
-      },
-      {
-        "name": "Baggio",
-        "origem": "Brasil",
-        "composicao": "100% coffea arabica"
-      }
-    ];
+
+    var beersUri = Uri(
+        scheme: 'https',
+        host: 'random-data-api.com',
+        path: 'api/coffee/random_coffee',
+        queryParameters: {'size': '10'});
+
+    var jsonString = await http.read(beersUri);
+    var beersJson = jsonDecode(jsonString);
+    tableStateNotifier.value = beersJson;
   }
 
-  void carregarNacoes() {
+  Future<void> carregarNacoes() async {
     colunaNacao();
-    tableStateNotifier.value = [
-      {
-        "name": "Brasil",
-        "habitantes": "214,3 milhões",
-        "area": "8.510.000 km²"
-      },
-      {"name": "China", "habitantes": "1,412 bilhão ", "area": "9.597.000 km²"},
-      {
-        "name": "Estados Unidos",
-        "habitantes": "331,9 milhões",
-        "area": "9.834.000 km²"
-      }
-    ];
+
+    var beersUri = Uri(
+        scheme: 'https',
+        host: 'random-data-api.com',
+        path: 'api/nation/random_nation',
+        queryParameters: {'size': '10'});
+
+    var jsonString = await http.read(beersUri);
+    var beersJson = jsonDecode(jsonString);
+    tableStateNotifier.value = beersJson;
   }
 
   void carregar(int index) {
+    var res = null;
+    print('carregar #1 - antes de carregarCervejas');
     if (index == 1) {
-      carregarCervejas();
+      res = carregarCervejas();
+      print('carregar #2 - carregarCervejas retornou $res');
     } else if (index == 0) {
-      carregarCafe();
+      res = carregarCafe();
     } else if (index == 2) {
       carregarNacoes();
     } else {
@@ -87,13 +83,13 @@ class DataService {
   }
 
   void colunaCafe() {
-    chave = ["name", "origem", "composicao"];
-    coluna = ["Nome", "Origem", "Ingredientes"];
+    chave = ["blend_name", "origin", "uid"];
+    coluna = ["Nome", "Origem", "UID"];
   }
 
   void colunaNacao() {
-    chave = ["name", "habitantes", "area"];
-    coluna = ["Nome", "Habitantes", "Área"];
+    chave = ["nationality", "language", "capital"];
+    coluna = ["Nome", "Lingua", "Capital"];
   }
 }
 
