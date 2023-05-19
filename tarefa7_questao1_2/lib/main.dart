@@ -5,32 +5,28 @@ import 'dart:convert';
 
 void main() {
   MyApp app = MyApp();
-
   runApp(app);
 }
 
 class DataService {
-  final ValueNotifier<List> tableStateNotifier = new ValueNotifier([]);
+  final ValueNotifier<List> tableStateNotifier = ValueNotifier([]);
   var coluna = ["Nome", "Estilo", "IBU"];
   var chave = ["name", "style", "ibu"];
+  int selectedQuantity = 10;
+  int index = 0;
 
   Future<void> carregarCervejas() async {
     colunaCerveja();
-    //1
 
     var beersUri = Uri(
-        scheme: 'https',
-        host: 'random-data-api.com',
-        path: 'api/beer/random_beer',
-        queryParameters: {'size': '10'});
+      scheme: 'https',
+      host: 'random-data-api.com',
+      path: 'api/beer/random_beer',
+      queryParameters: {'size': selectedQuantity.toString()},
+    );
 
-    print('carregarCervejas #1 - antes do await');
-    //2
     var jsonString = await http.read(beersUri);
-    print('carregarCervejas #2 - depois do await');
-    //3
     var beersJson = jsonDecode(jsonString);
-    //4
     tableStateNotifier.value = beersJson;
   }
 
@@ -38,10 +34,11 @@ class DataService {
     colunaCafe();
 
     var beersUri = Uri(
-        scheme: 'https',
-        host: 'random-data-api.com',
-        path: 'api/coffee/random_coffee',
-        queryParameters: {'size': '10'});
+      scheme: 'https',
+      host: 'random-data-api.com',
+      path: 'api/coffee/random_coffee',
+      queryParameters: {'size': selectedQuantity.toString()},
+    );
 
     var jsonString = await http.read(beersUri);
     var beersJson = jsonDecode(jsonString);
@@ -52,10 +49,11 @@ class DataService {
     colunaNacao();
 
     var beersUri = Uri(
-        scheme: 'https',
-        host: 'random-data-api.com',
-        path: 'api/nation/random_nation',
-        queryParameters: {'size': '10'});
+      scheme: 'https',
+      host: 'random-data-api.com',
+      path: 'api/nation/random_nation',
+      queryParameters: {'size': selectedQuantity.toString()},
+    );
 
     var jsonString = await http.read(beersUri);
     var beersJson = jsonDecode(jsonString);
@@ -64,10 +62,8 @@ class DataService {
 
   void carregar(int index) {
     var res = null;
-    print('carregar #1 - antes de carregarCervejas');
     if (index == 1) {
       res = carregarCervejas();
-      print('carregar #2 - carregarCervejas retornou $res');
     } else if (index == 0) {
       res = carregarCafe();
     } else if (index == 2) {
@@ -89,7 +85,7 @@ class DataService {
 
   void colunaNacao() {
     chave = ["nationality", "language", "capital"];
-    coluna = ["Nome", "Lingua", "Capital"];
+    coluna = ["Nome", "Língua", "Capital"];
   }
 }
 
@@ -99,24 +95,49 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(primarySwatch: Colors.orange),
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text("DICAS"),
-          ),
-          body: ValueListenableBuilder(
-              valueListenable: dataService.tableStateNotifier,
-              builder: (_, value, __) {
-                return DataTableWidget(
-                  jsonObjects: value,
-                  propertyNames: dataService.chave,
-                  columnNames: dataService.coluna,
-                );
-              }),
-          bottomNavigationBar:
-              NewNavBar(itemSelectedCallback: dataService.carregar),
-        ));
+      theme: ThemeData(primarySwatch: Colors.orange),
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text("DICAS"),
+          actions: [
+            PopupMenuButton<int>(
+              icon: Icon(Icons.filter_list),
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 5,
+                  child: Text("5 itens"),
+                ),
+                PopupMenuItem(
+                  value: 10,
+                  child: Text("10 itens"),
+                ),
+                PopupMenuItem(
+                  value: 15,
+                  child: Text("15 itens"),
+                ),
+              ],
+              onSelected: (value) {
+                dataService.selectedQuantity = value;
+                dataService.carregar(dataService.index);
+              },
+            ),
+          ],
+        ),
+        body: ValueListenableBuilder(
+          valueListenable: dataService.tableStateNotifier,
+          builder: (_, value, __) {
+            return DataTableWidget(
+              jsonObjects: value,
+              propertyNames: dataService.chave,
+              columnNames: dataService.coluna,
+            );
+          },
+        ),
+        bottomNavigationBar:
+            NewNavBar(itemSelectedCallback: dataService.carregar),
+      ),
+    );
   }
 }
 
