@@ -20,19 +20,17 @@ class DataService {
     return;
   }
 
-  Future<void> carregarCervejas() async {
+  void carregarCervejas() {
     var beersUri = Uri(
         scheme: 'https',
         host: 'random-data-api.com',
         path: 'api/beer/random_beer',
         queryParameters: {'size': '5'});
 
-    var jsonString = await http.read(beersUri);
-
+    http.read(beersUri).then( (jsonString){
     var beersJson = jsonDecode(jsonString);
-
     tableStateNotifier.value = beersJson;
-  }
+  });
 }
 
 final dataService = DataService();
