@@ -27,10 +27,11 @@ class DataService {
         path: 'api/beer/random_beer',
         queryParameters: {'size': '5'});
 
-    http.read(beersUri).then( (jsonString){
-    var beersJson = jsonDecode(jsonString);
-    tableStateNotifier.value = beersJson;
-  });
+    http.read(beersUri).then((jsonString) {
+      var beersJson = jsonDecode(jsonString);
+      tableStateNotifier.value = beersJson;
+    });
+  }
 }
 
 final dataService = DataService();
