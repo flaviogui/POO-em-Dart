@@ -3,14 +3,24 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+void main() {
+  MyApp app = MyApp();
+
+  runApp(app);
+}
+
 enum TableStatus { idle, loading, ready, error }
 
 class DataService {
   final ValueNotifier<Map<String, dynamic>> tableStateNotifier =
-      ValueNotifier({'status': TableStatus.loading, 'dataObjects': []});
+      ValueNotifier({'status': TableStatus.idle, 'dataObjects': []});
 
   void carregar(index) {
     final funcoes = [carregarCafes, carregarCervejas, carregarNacoes];
+    tableStateNotifier.value = {
+      'status': TableStatus.loading,
+      'dataObjects': []
+    };
 
     funcoes[index]();
   }
@@ -44,17 +54,11 @@ class DataService {
 
 final dataService = DataService();
 
-void main() {
-  MyApp app = MyApp();
-
-  runApp(app);
-}
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(primarySwatch: Colors.deepPurple),
+        theme: ThemeData(primarySwatch: Colors.red),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
@@ -65,11 +69,20 @@ class MyApp extends StatelessWidget {
               builder: (_, value, __) {
                 switch (value['status']) {
                   case TableStatus.idle:
-                    return Text("Toque algum botão");
+                    return const Center(
+                      child: Text(
+                        "Clique em um desses 3 botões",
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
+                      ),
+                    );
 
                   case TableStatus.loading:
-                    return CircularProgressIndicator();
-
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
                   case TableStatus.ready:
                     return DataTableWidget(
                         jsonObjects: value['dataObjects'],
