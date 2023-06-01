@@ -26,11 +26,40 @@ class DataService {
   }
 
   void carregarCafes() {
-    return;
+    var beersUri = Uri(
+      scheme: 'https',
+      host: 'random-data-api.com',
+      path: 'api/coffee/random_coffee',
+      queryParameters: {'size': '10'},
+    );
+
+    http.read(beersUri).then((jsonString) {
+      var beersJson = jsonDecode(jsonString);
+      tableStateNotifier.value = {
+        'status': TableStatus.ready,
+        'dataObjects': beersJson,
+        'propertyNames': ["blend_name", "origin", "uid"],
+        'columnNames': ["Nome", "Origem", "UID"],
+      };
+    });
   }
 
-  void carregarNacoes() {
-    return;
+  Future<void> carregarNacoes() async {
+    var beersUri = Uri(
+      scheme: 'https',
+      host: 'random-data-api.com',
+      path: 'api/nation/random_nation',
+      queryParameters: {'size': '10'},
+    );
+
+    var jsonString = await http.read(beersUri);
+    var beersJson = jsonDecode(jsonString);
+    tableStateNotifier.value = {
+      'status': TableStatus.ready,
+      'dataObjects': beersJson,
+      'propertyNames': ["nationality", "language", "capital"],
+      'columnNames': ["Nome", "Língua", "Capital"],
+    };
   }
 
   void carregarCervejas() {
@@ -38,7 +67,7 @@ class DataService {
         scheme: 'https',
         host: 'random-data-api.com',
         path: 'api/beer/random_beer',
-        queryParameters: {'size': '5'});
+        queryParameters: {'size': '10'});
 
     http.read(beersUri).then((jsonString) {
       var beersJson = jsonDecode(jsonString);
@@ -46,7 +75,7 @@ class DataService {
         'status': TableStatus.ready,
         'dataObjects': beersJson,
         'propertyNames': ["name", "style", "ibu"],
-        'columnNames': ["Nome", "Estilo", "IBU"],
+        'columnNames': ["Nome", "Origem", "UID"],
       };
     });
   }
@@ -62,7 +91,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
-            title: const Text("Dicas"),
+            title: const Text("DICAS E INFORMAÇÕES"),
           ),
           body: ValueListenableBuilder(
               valueListenable: dataService.tableStateNotifier,
