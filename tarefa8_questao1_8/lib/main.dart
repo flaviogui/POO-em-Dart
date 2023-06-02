@@ -16,7 +16,12 @@ class DataService {
       ValueNotifier({'status': TableStatus.idle, 'dataObjects': []});
 
   void carregar(index) {
-    final funcoes = [carregarCafes, carregarCervejas, carregarNacoes];
+    final funcoes = [
+      carregarCafes,
+      carregarCervejas,
+      carregarNacoes,
+      carregarEnderecos
+    ];
     tableStateNotifier.value = {
       'status': TableStatus.loading,
       'dataObjects': []
@@ -96,6 +101,31 @@ class DataService {
       print('$error');
     });
   }
+
+  Future<void> carregarEnderecos() async {
+    try {
+      var beersUri = Uri(
+        scheme: 'https',
+        host: 'random-data-api.com',
+        path: 'api/v2/addresses',
+        queryParameters: {'size': '10'},
+      );
+
+      var jsonString = await http.read(beersUri);
+      var beersJson = jsonDecode(jsonString);
+      tableStateNotifier.value = {
+        'status': TableStatus.ready,
+        'dataObjects': beersJson,
+        'propertyNames': ["city", "country", "community"],
+        'columnNames': ["Cidade", "País", "Comunidade"],
+      };
+    } catch (error) {
+      tableStateNotifier.value = {
+        'status': TableStatus.error,
+      };
+      print('$error');
+    }
+  }
 }
 
 final dataService = DataService();
@@ -104,51 +134,64 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(primarySwatch: Colors.red),
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text("DICAS E INFORMAÇÕES"),
-          ),
-          body: ValueListenableBuilder(
-              valueListenable: dataService.tableStateNotifier,
-              builder: (_, value, __) {
-                switch (value['status']) {
-                  case TableStatus.idle:
-                    return const Center(
-                      child: Text(
-                        "Clique em um desses 3 botões",
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20),
-                      ),
-                    );
+      theme: ThemeData(primarySwatch: Colors.red),
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text("DICAS E INFORMAÇÕES"),
+        ),
+        body: ValueListenableBuilder(
+          valueListenable: dataService.tableStateNotifier,
+          builder: (_, value, __) {
+            switch (value['status']) {
+              case TableStatus.idle:
+                return const Center(
+                  child: Text(
+                    "Clique em um desses 3 botões",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                );
 
-                  case TableStatus.loading:
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  case TableStatus.ready:
-                    return DataTableWidget(
-                        jsonObjects: value['dataObjects'],
-                        propertyNames: value['propertyNames'],
-                        columnNames: value['columnNames']);
-                  case TableStatus.error:
-                    return const Center(
-                        child: Text(
-                            'Erro ao carregar... Por favor, verificar sua conexão com a internet!',
-                            style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15)));
-                }
+              case TableStatus.loading:
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
 
-                return Text("...");
-              }),
-          bottomNavigationBar:
-              NewNavBar(itemSelectedCallback: dataService.carregar),
-        ));
+              case TableStatus.ready:
+                return ListView(
+                  children: [
+                    DataTableWidget(
+                      jsonObjects: value['dataObjects'],
+                      columnNames: value['columnNames'],
+                      propertyNames: value['propertyNames'],
+                    ),
+                  ],
+                );
+
+              case TableStatus.error:
+                return const Center(
+                  child: Text(
+                    'Erro ao carregar... Por favor, verificar sua conexão com a internet!',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                );
+            }
+
+            return Text("...");
+          },
+        ),
+        bottomNavigationBar:
+            NewNavBar(itemSelectedCallback: dataService.carregar),
+      ),
+    );
   }
 }
 
@@ -169,6 +212,8 @@ class NewNavBar extends HookWidget {
           _itemSelectedCallback(index);
         },
         currentIndex: state.value,
+        selectedItemColor: Colors.red,
+        unselectedItemColor: Colors.black,
         items: const [
           BottomNavigationBarItem(
             label: "Cafés",
@@ -177,37 +222,52 @@ class NewNavBar extends HookWidget {
           BottomNavigationBarItem(
               label: "Cervejas", icon: Icon(Icons.local_drink_outlined)),
           BottomNavigationBarItem(
-              label: "Nações", icon: Icon(Icons.flag_outlined))
+              label: "Nações", icon: Icon(Icons.flag_outlined)),
+          BottomNavigationBarItem(
+              label: "Endereços", icon: Icon(Icons.add_location_alt_outlined)),
         ]);
   }
 }
 
 class DataTableWidget extends StatelessWidget {
-  final List jsonObjects;
+  final List<dynamic> jsonObjects;
+  final List<dynamic> columnNames;
+  final List<dynamic> propertyNames;
 
-  final List<String> columnNames;
-
-  final List<String> propertyNames;
-
-  DataTableWidget(
-      {this.jsonObjects = const [],
-      this.columnNames = const ["Nome", "Estilo", "IBU"],
-      this.propertyNames = const ["name", "style", "ibu"]});
+  DataTableWidget({
+    this.jsonObjects = const [],
+    this.columnNames = const ["Nome", "Estilo", "IBU"],
+    this.propertyNames = const ["name", "style", "ibu"],
+  });
 
   @override
   Widget build(BuildContext context) {
     return DataTable(
-        columns: columnNames
-            .map((name) => DataColumn(
-                label: Expanded(
-                    child: Text(name,
-                        style: TextStyle(fontStyle: FontStyle.italic)))))
-            .toList(),
-        rows: jsonObjects
-            .map((obj) => DataRow(
-                cells: propertyNames
-                    .map((propName) => DataCell(Text(obj[propName])))
-                    .toList()))
-            .toList());
+      columns: columnNames
+          .map(
+            (name) => DataColumn(
+              label: Expanded(
+                child: Text(
+                  name,
+                  style: TextStyle(fontStyle: FontStyle.italic),
+                ),
+              ),
+            ),
+          )
+          .toList(),
+      rows: jsonObjects
+          .map(
+            (obj) => DataRow(
+              cells: propertyNames
+                  .map(
+                    (propName) => DataCell(
+                      Text(obj[propName].toString()),
+                    ),
+                  )
+                  .toList(),
+            ),
+          )
+          .toList(),
+    );
   }
 }
