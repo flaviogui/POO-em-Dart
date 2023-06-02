@@ -41,25 +41,37 @@ class DataService {
         'propertyNames': ["blend_name", "origin", "uid"],
         'columnNames': ["Nome", "Origem", "UID"],
       };
+    }).catchError((error) {
+      tableStateNotifier.value = {
+        'status': TableStatus.error,
+      };
+      print('$error');
     });
   }
 
   Future<void> carregarNacoes() async {
-    var beersUri = Uri(
-      scheme: 'https',
-      host: 'random-data-api.com',
-      path: 'api/nation/random_nation',
-      queryParameters: {'size': '10'},
-    );
+    try {
+      var beersUri = Uri(
+        scheme: 'https',
+        host: 'random-data-api.com',
+        path: 'api/nation/random_nation',
+        queryParameters: {'size': '10'},
+      );
 
-    var jsonString = await http.read(beersUri);
-    var beersJson = jsonDecode(jsonString);
-    tableStateNotifier.value = {
-      'status': TableStatus.ready,
-      'dataObjects': beersJson,
-      'propertyNames': ["nationality", "language", "capital"],
-      'columnNames': ["Nome", "Língua", "Capital"],
-    };
+      var jsonString = await http.read(beersUri);
+      var beersJson = jsonDecode(jsonString);
+      tableStateNotifier.value = {
+        'status': TableStatus.ready,
+        'dataObjects': beersJson,
+        'propertyNames': ["nationality", "language", "capital"],
+        'columnNames': ["Nome", "Língua", "Capital"],
+      };
+    } catch (error) {
+      tableStateNotifier.value = {
+        'status': TableStatus.error,
+      };
+      print('$error');
+    }
   }
 
   void carregarCervejas() {
@@ -77,6 +89,11 @@ class DataService {
         'propertyNames': ["name", "style", "ibu"],
         'columnNames': ["Nome", "Origem", "UID"],
       };
+    }).catchError((error) {
+      tableStateNotifier.value = {
+        'status': TableStatus.error,
+      };
+      print('$error');
     });
   }
 }
@@ -117,9 +134,14 @@ class MyApp extends StatelessWidget {
                         jsonObjects: value['dataObjects'],
                         propertyNames: value['propertyNames'],
                         columnNames: value['columnNames']);
-
                   case TableStatus.error:
-                    return Text("Lascou");
+                    return const Center(
+                        child: Text(
+                            'Erro ao carregar... Por favor, verificar sua conexão com a internet!',
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15)));
                 }
 
                 return Text("...");
