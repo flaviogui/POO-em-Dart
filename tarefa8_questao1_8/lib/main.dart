@@ -134,7 +134,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(primarySwatch: Colors.red),
+      theme: ThemeData(primarySwatch: Colors.blue),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
@@ -145,17 +145,26 @@ class MyApp extends StatelessWidget {
           builder: (_, value, __) {
             switch (value['status']) {
               case TableStatus.idle:
-                return const Center(
-                  child: Text(
-                    "Clique em um desses 3 botões",
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.network(
+                        'https://scontent.fmvf6-1.fna.fbcdn.net/v/t39.30808-6/311029216_522242406575869_3901351646047762344_n.png?_nc_cat=104&ccb=1-7&_nc_sid=e3f864&_nc_eui2=AeEkt8ZnzHzeEuwBLuh5ll-RTgp5ZxrTSHJOCnlnGtNIcmjAAka0A8gFNQnM3mEPA_FMYXxoke8lHzRy9PIdiAE2&_nc_ohc=xB8XfFSp1_gAX-6Xv7x&_nc_ht=scontent.fmvf6-1.fna&oh=00_AfDalP_62VjiHv05gSoFX2eF-ZEybQ3Lqcr_T9indkivMQ&oe=647E6E82',
+                        height: 200,
+                      ),
+                      SizedBox(height: 16),
+                      const Text(
+                        "CLIQUE EM ALGUM DESSES 4 BOTÕES",
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ],
                   ),
                 );
-
               case TableStatus.loading:
                 return const Center(
                   child: CircularProgressIndicator(),
@@ -177,7 +186,7 @@ class MyApp extends StatelessWidget {
                   child: Text(
                     'Erro ao carregar... Por favor, verificar sua conexão com a internet!',
                     style: TextStyle(
-                      color: Colors.red,
+                      color: Colors.blue,
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
                     ),
@@ -212,8 +221,8 @@ class NewNavBar extends HookWidget {
           _itemSelectedCallback(index);
         },
         currentIndex: state.value,
-        selectedItemColor: Colors.red,
-        unselectedItemColor: Colors.black,
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.brown,
         items: const [
           BottomNavigationBarItem(
             label: "Cafés",
