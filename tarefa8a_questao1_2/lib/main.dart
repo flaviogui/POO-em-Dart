@@ -3,6 +3,12 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+void main() {
+  MyApp app = MyApp();
+
+  runApp(app);
+}
+
 enum TableStatus { idle, loading, ready, error }
 
 class DataService {
@@ -85,12 +91,6 @@ class DataService {
 
 final dataService = DataService();
 
-void main() {
-  MyApp app = MyApp();
-
-  runApp(app);
-}
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -158,7 +158,7 @@ class NewNavBar extends HookWidget {
   }
 }
 
-class ListWidget extends StatelessWidget {
+class ListWidget extends HookWidget {
   final List jsonObjects;
 
   final List<String> propertyNames;
@@ -169,7 +169,16 @@ class ListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var controller = useScrollController();
+    useEffect(() {
+      controller.addListener(() {
+        if (controller.position.pixels == controller.position.maxScrollExtent)
+          print('end of scroll');
+      });
+    }, [controller]);
+
     return ListView.separated(
+      controller: controller,
       padding: EdgeInsets.all(10),
       separatorBuilder: (_, __) => Divider(
         height: 5,
