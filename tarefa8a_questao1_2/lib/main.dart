@@ -70,6 +70,7 @@ class DataService {
         'dataObjects': itemsJson,
         'propertyNames': propertyNames,
         'columnNames': propertyNames,
+        'itemCount': itemsJson.length,
       };
     });
   }
@@ -91,7 +92,13 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
-            title: const Text("Dicas"),
+            title: ValueListenableBuilder(
+              valueListenable: dataService.tableStateNotifier,
+              builder: (_, value, __) {
+                int itemCount = value['dataObjects'].length;
+                return Text("Dicas ($itemCount)");
+              },
+            ),
           ),
           body: ValueListenableBuilder(
               valueListenable: dataService.tableStateNotifier,
