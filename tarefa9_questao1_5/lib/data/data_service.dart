@@ -21,6 +21,10 @@ class DataService {
             : n;
   }
 
+  int get numberOfItens {
+    return _numberOfItems;
+  }
+
   final ValueNotifier<Map<String, dynamic>> tableStateNotifier = ValueNotifier({
     'status': TableStatus.idle,
     'dataObjects': [],
