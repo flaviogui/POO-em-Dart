@@ -6,6 +6,10 @@ enum TableStatus { idle, loading, ready, error }
 
 enum ItemType { beer, coffee, nation, none }
 
+class ConfigMenu {
+  static const List<int> itemQuantidades = [3, 5, 7];
+}
+
 class DataService {
   final ValueNotifier<Map<String, dynamic>> tableStateNotifier = ValueNotifier({
     'status': TableStatus.idle,

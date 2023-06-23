@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
         home: Scaffold(
           appBar: AppBar(title: const Text("Dicas"), actions: [
             PopupMenuButton(
-              itemBuilder: (_) => [3, 7, 15]
+              itemBuilder: (_) => ConfigMenu.itemQuantidades
                   .map((num) => PopupMenuItem(
                         value: num,
                         child: Text("Carregar $num itens por vez"),
