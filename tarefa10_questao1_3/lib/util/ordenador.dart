@@ -1,29 +1,28 @@
-class Ordenador {
-  List ordenarCervejasPorNomeCrescente(List cervejas) {
-    List cervejasOrdenadas = List.of(cervejas);
+abstract class Decididor {
+  bool precisaTrocarAtualPeloProximo(dynamic atual, dynamic proximo);
+}
 
+class Ordenador {
+  List ordenar(List objetos, String propriedade) {
+    List objetosOrdenados = List.of(objetos);
     bool trocouAoMenosUm;
 
     do {
       trocouAoMenosUm = false;
 
-      for (int i = 0; i < cervejasOrdenadas.length - 1; i++) {
-        var atual = cervejasOrdenadas[i];
+      for (int i = 0; i < objetosOrdenados.length - 1; i++) {
+        var atual = objetosOrdenados[i];
+        var proximo = objetosOrdenados[i + 1];
 
-        var proximo = cervejasOrdenadas[i + 1];
-
-        if (atual["name"].compareTo(proximo["name"]) > 0) {
-          var aux = cervejasOrdenadas[i];
-
-          cervejasOrdenadas[i] = cervejasOrdenadas[i + 1];
-
-          cervejasOrdenadas[i + 1] = aux;
-
+        if (atual[propriedade].compareTo(proximo[propriedade]) > 0) {
+          var aux = objetosOrdenados[i];
+          objetosOrdenados[i] = objetosOrdenados[i + 1];
+          objetosOrdenados[i + 1] = aux;
           trocouAoMenosUm = true;
         }
       }
     } while (trocouAoMenosUm);
 
-    return cervejasOrdenadas;
+    return objetosOrdenados;
   }
 }

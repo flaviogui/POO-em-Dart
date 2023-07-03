@@ -3,10 +3,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../util/ordenador.dart';
 
-class ConfigMenu {
-  static const List<int> itemQuantidades = [3, 5, 7];
-}
-
 enum TableStatus { idle, loading, ready, error }
 
 enum ItemType {
@@ -24,7 +20,6 @@ enum ItemType {
           : this == nation
               ? ["Nome", "Capital", "Idioma", "Esporte"]
               : [];
-
   List<String> get properties => this == coffee
       ? ["blend_name", "origin", "variety"]
       : this == beer
@@ -36,9 +31,7 @@ enum ItemType {
 
 class DataService {
   static const MAX_N_ITEMS = 15;
-
   static const MIN_N_ITEMS = 3;
-
   static const DEFAULT_N_ITEMS = 7;
 
   int _numberOfItems = DEFAULT_N_ITEMS;
@@ -59,7 +52,6 @@ class DataService {
 
   void carregar(index) {
     final params = [ItemType.coffee, ItemType.beer, ItemType.nation];
-
     carregarPorTipo(params[index]);
   }
 
@@ -72,11 +64,7 @@ class DataService {
 
     var objetosOrdenados = [];
 
-    final type = tableStateNotifier.value['itemType'];
-
-    if (type == ItemType.beer && propriedade == "name") {
-      objetosOrdenados = ord.ordenarCervejasPorNomeCrescente(objetos);
-    }
+    objetosOrdenados = ord.ordenar(objetos, propriedade);
 
     emitirEstadoOrdenado(objetosOrdenados, propriedade);
   }
@@ -91,21 +79,17 @@ class DataService {
 
   Future<List<dynamic>> acessarApi(Uri uri) async {
     var jsonString = await http.read(uri);
-
     var json = jsonDecode(jsonString);
-
     json = [...tableStateNotifier.value['dataObjects'], ...json];
 
     return json;
   }
 
   void emitirEstadoOrdenado(List objetosOrdenados, String propriedade) {
-    var estado = tableStateNotifier.value;
+    var estado = Map<String, dynamic>.from(tableStateNotifier.value);
 
     estado['dataObjects'] = objetosOrdenados;
-
     estado['sortCriteria'] = propriedade;
-
     estado['ascending'] = true;
 
     tableStateNotifier.value = estado;
@@ -136,19 +120,31 @@ class DataService {
       tableStateNotifier.value['itemType'] != type;
 
   void carregarPorTipo(ItemType type) async {
-    //ignorar solicitação se uma requisição já estiver em curso
-
-    if (temRequisicaoEmCurso()) return;
-
+    if (temRequisicaoEmCurso()) {
+      return;
+    }
     if (mudouTipoDeItemRequisitado(type)) {
       emitirEstadoCarregando(type);
     }
 
     var uri = montarUri(type);
-
     var json = await acessarApi(uri);
 
     emitirEstadoPronto(type, json);
+  }
+}
+
+class DecididorJson extends Decididor {
+  final String propriedade;
+  DecididorJson(this.propriedade);
+
+  @override
+  bool precisaTrocarAtualPeloProximo(atual, proximo) {
+    try {
+      return atual[propriedade].compareTo(proximo[propriedade]) > 0;
+    } catch (error) {
+      return false;
+    }
   }
 }
 
