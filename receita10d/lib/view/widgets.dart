@@ -10,7 +10,7 @@ class MyApp extends HookWidget {
     return MaterialApp(
         theme: ThemeData(
             appBarTheme: AppBarTheme(foregroundColor: Colors.white),
-            primarySwatch: Colors.green),
+            primarySwatch: Colors.deepPurple),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: EasySearchBar(
@@ -84,13 +84,13 @@ class NewNavBar extends HookWidget {
         currentIndex: state.value,
         items: const [
           BottomNavigationBarItem(
-            label: "Empresas",
-            icon: Icon(Icons.business_outlined),
+            label: "Eletrônicos",
+            icon: Icon(Icons.kitchen_outlined),
           ),
           BottomNavigationBarItem(
-              label: "Sobremesas", icon: Icon(Icons.cake_outlined)),
+              label: "Bancos", icon: Icon(Icons.account_balance_outlined)),
           BottomNavigationBarItem(
-              label: "Veículos", icon: Icon(Icons.car_repair_outlined))
+              label: "Endereços", icon: Icon(Icons.house_outlined))
         ]);
   }
 }

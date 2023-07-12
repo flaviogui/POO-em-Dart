@@ -33,13 +33,13 @@ class DataService {
   static const DEFAULT_N_ITEMS = 7;
 
   int _numberOfItems = DEFAULT_N_ITEMS;
-  List _possibleNItems = [MIN_N_ITEMS, DEFAULT_N_ITEMS, MAX_N_ITEMS];
+  List<int> _possibleNItems = [MIN_N_ITEMS, DEFAULT_N_ITEMS, MAX_N_ITEMS];
 
   int get numberOfItems {
     return _numberOfItems;
   }
 
-  set numberOfItems(n) {
+  set numberOfItems(int n) {
     _numberOfItems = n < 0
         ? MIN_N_ITEMS
         : n > MAX_N_ITEMS
@@ -47,67 +47,86 @@ class DataService {
             : n;
   }
 
-  List get possibleNItems {
+  List<int> get possibleNItems {
     return _possibleNItems;
   }
 
-  set possibleNItems(n) {
-    _possibleNItems = possibleNItems;
+  set possibleNItems(List<int> n) {
+    _possibleNItems = n;
   }
 
   ValueNotifier<Map<String, dynamic>> tableStateNotifier = ValueNotifier({
     'status': TableStatus.idle,
     'dataObjects': [],
-    'itemType': ItemType.none
+    'itemType': ItemType.none,
   });
 
-  void carregar(index) {
+  void carregar(int index) {
     final params = [ItemType.appliances, ItemType.banks, ItemType.addresses];
     carregarPorTipo(params[index]);
   }
 
-  void ordenarEstadoAtual(final String propriedade, final bool ascending) {
-    List objetos = tableStateNotifier.value['dataObjects'] ?? [];
-    if (objetos == []) return;
-    objetos.sort((a, b) => ascending
-        ? a[propriedade].compareTo(b[propriedade])
-        : b[propriedade].compareTo(a[propriedade]));
+  void ordenarEstadoAtual(String propriedade, bool ascending) {
+    List<dynamic> objetos = tableStateNotifier.value['dataObjects'] ?? [];
+    if (objetos.isEmpty) return;
+
+    objetos.sort((a, b) {
+      var valorA = a[propriedade];
+      var valorB = b[propriedade];
+      if (valorA is String && valorB is String) {
+        return ascending ? valorA.compareTo(valorB) : valorB.compareTo(valorA);
+      } else if (valorA is num && valorB is num) {
+        return ascending ? valorA.compareTo(valorB) : valorB.compareTo(valorA);
+      } else {
+        return 0;
+      }
+    });
 
     emitirEstadoOrdenado(objetos, propriedade, ascending);
   }
 
-  List filtarObjetos() {
+  List<dynamic> filtarObjetos() {
     String filtro = tableStateNotifier.value['filterCriteria'];
-    List objetos = tableStateNotifier.value['dataObjects'] ?? [];
-    if (objetos == []) return [];
-    if (filtro == '') return objetos;
-    List objetosFiltrados = objetos
-        .where((e) => e.values
-            .map((v) => v.toString().contains(filtro))
-            .toList()
-            .contains(true))
-        .toList();
+    List<dynamic> objetos = tableStateNotifier.value['dataObjects'] ?? [];
+    if (objetos.isEmpty) return [];
+
+    List<dynamic> objetosFiltrados = objetos.where((objeto) {
+      var propriedades = objeto.values.toList();
+      for (var propriedade in propriedades) {
+        if (propriedade is String && propriedade.contains(filtro)) {
+          return true;
+        }
+      }
+      return false;
+    }).toList();
 
     return objetosFiltrados;
   }
 
   Uri montarUri(ItemType type) {
     return Uri(
-        scheme: 'https',
-        host: 'random-data-api.com',
-        path: 'api/${type.asString}/random_${type.asString}',
-        queryParameters: {'size': '$_numberOfItems'});
+      scheme: 'https',
+      host: 'random-data-api.com',
+      path: 'api/v2/${type.asString}',
+      queryParameters: {'size': '$_numberOfItems'},
+    );
   }
 
   Future<List<dynamic>> acessarApi(Uri uri) async {
-    var jsonString = await http.read(uri);
-    var json = jsonDecode(jsonString);
-    json = [...tableStateNotifier.value['dataObjects'], ...json];
-    return json;
+    var response = await http.get(uri);
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body);
+      return json;
+    } else {
+      throw Exception('Erro ao acessar a API');
+    }
   }
 
   void emitirEstadoOrdenado(
-      List objetosOrdenados, String propriedade, bool ascending) {
+    List<dynamic> objetosOrdenados,
+    String propriedade,
+    bool ascending,
+  ) {
     var estado = Map<String, dynamic>.from(tableStateNotifier.value);
     estado['dataObjects'] = objetosOrdenados;
     estado['sortCriteria'] = propriedade;
@@ -126,18 +145,17 @@ class DataService {
       'status': TableStatus.loading,
       'dataObjects': [],
       'itemType': type,
-      'filterCriteria': ''
+      'filterCriteria': '',
     };
   }
 
-  void emitirEstadoPronto(ItemType type, var json) {
+  void emitirEstadoPronto(ItemType type, List<dynamic> json) {
     tableStateNotifier.value = {
       'itemType': type,
       'status': TableStatus.ready,
       'dataObjects': json,
-      'propertyNames': type.properties,
       'columnNames': type.columns,
-      'filterCriteria': ''
+      'filterCriteria': '',
     };
   }
 
@@ -147,14 +165,23 @@ class DataService {
       tableStateNotifier.value['itemType'] != type;
 
   void carregarPorTipo(ItemType type) async {
-    //ignorar solicitação se uma requisição já estiver em curso
     if (temRequisicaoEmCurso()) return;
     if (mudouTipoDeItemRequisitado(type)) {
       emitirEstadoCarregando(type);
     }
     var uri = montarUri(type);
-    var json = await acessarApi(uri);
-    emitirEstadoPronto(type, json);
+    try {
+      var json = await acessarApi(uri);
+      emitirEstadoPronto(type, json);
+    } catch (e) {
+      emitirEstadoOrdenado([], '', true);
+      tableStateNotifier.value = {
+        'status': TableStatus.error,
+        'dataObjects': [],
+        'itemType': type,
+        'filterCriteria': '',
+      };
+    }
   }
 }
 
