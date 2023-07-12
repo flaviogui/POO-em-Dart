@@ -154,7 +154,8 @@ class DataService {
       'itemType': type,
       'status': TableStatus.ready,
       'dataObjects': json,
-      'columnNames': type.columns,
+      'columnNames': type.columns, // Adicione essa linha
+      'propertyNames': type.properties, // Adicione essa linha
       'filterCriteria': '',
     };
   }
